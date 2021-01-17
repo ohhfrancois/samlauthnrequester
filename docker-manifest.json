@@ -1,0 +1,5 @@
+{
+    "ecr_region": "none",
+    "container_version": "0.3.0",
+    "container_name": "ohhfrancois/samlauthnrequester"
+}
