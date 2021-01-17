@@ -16,7 +16,6 @@ SAML Requester is a small program GOLANG to send SAML AuthnRequest to an IDP
   - [Compose Container](#compose-container)
 - [Development](#development)
 - [Testing](#testing)
-  - [Test with local container](#test-with-local-container)
 - [Release](#release)
   - [Docker Release](#docker-release)
 - [Tips](#tips)
@@ -130,23 +129,20 @@ make run
 
 # Testing
 
-```bash
-make lint
-make test
-```
+Will :
+- build local container
+- generate certificate
+- generate sp metadata
+- add saml sp metadata to test IDp
+- launch container
+- request saml-requester
+- redirect to http://localhost:8090/saml
 
-## Test with local container
-
-```bash
-make build-local
-```
-
-generate your local certificates
 
 ```bash
-openssl req -x509 -newkey rsa:2048 -keyout certificates/myservice.key -out certificates/myservice.cert -days 365 -nodes -subj "/CN=myservice.example.com"
-docker run -v $PWD/certificates:/app/certificates --env-file ./docker.envfile --rm psg-france/samlauthnrequester:latest
+make validate
 ```
+
 
 # Release
 

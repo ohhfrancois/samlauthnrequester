@@ -1,5 +1,5 @@
 SAMLRQT_IDP_URLMETADATA="https://samlid.test/saml/identityprovider/Metadata"
-SAMLRQT_SP_ID="ServiceProviderId"
+SAMLRQT_SP_ID="SP-Id-SAMLAuthnRequester"
 SAMLRQT_SP_ROOTURL="https://localhost:8090/saml"
 
 SAMLRQT_CERT_FILE="/app/certificates/myservice.cert"
