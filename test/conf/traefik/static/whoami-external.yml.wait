@@ -1,0 +1,22 @@
+http:
+  routers:
+    rt-whoami-ext:
+      rule: host(`whoami-ext.localhost`)
+      service: svc-whoami-ext
+      entryPoints:
+        - web
+      middlewares:
+        - my-plugin
+
+  services:
+   svc-whoami-ext:
+      loadBalancer:
+        servers:
+          - url: http://127.0.0.1:8090
+
+  middlewares:
+    my-plugin:
+      plugin:
+        dev:
+          headers:
+            Foo: Bar

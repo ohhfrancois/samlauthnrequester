@@ -1,0 +1,58 @@
+version: '3.3'
+
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    command:
+      - "--entrypoints.web.address=:80"
+      - "--log.level=DEBUG"
+      - "--log.format=common"
+      - "--accesslog=true"
+      - "--accesslog.format=common"
+      - "--api=true"
+      - "--api.insecure=true"
+      - "--api.dashboard=true"
+      - "--api.debug=true"
+      - "--ping=true"
+      - "--serversTransport.insecureSkipVerify=true"
+      - "--providers.file=true"
+      - "--providers.file.watch=true"
+      - "--providers.file.directory=/etc/traefik/static"
+      - "--providers.docker=true"
+      - "--providers.docker.watch=true"
+      - "--providers.docker.network=traefik"
+      - "--providers.docker.exposedByDefault=false"
+      - "--providers.docker.defaultRule=Host(`{{ index .Labels \"com.docker.compose.service\" }}.mymac.local`)"
+      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
+      - "--pilot.token=b110d6ac-35cb-4d2f-8271-136df23a3ccb"
+    labels:
+      ## Dashboard
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.traefik.rule=Host(`traefik.localhost`)'
+      - 'traefik.http.routers.traefik.service=api@internal'
+      - 'traefik.http.routers.traefik.entrypoints=web'
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - $PWD/conf/traefik/static:/etc/traefik/static
+      - $PWD/conf/traefik/certificates:/certificates
+    networks:
+      - traefik
+
+  whoami:
+    image: "containous/whoami"
+    container_name: whoami
+    labels:
+      traefik.enable: true
+      traefik.http.routers.whoami.rule: Host(`whoami.localhost`)
+      traefik.http.routers.whoami.entrypoints: web
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
